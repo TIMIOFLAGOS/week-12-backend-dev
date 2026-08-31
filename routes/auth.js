@@ -17,7 +17,7 @@
 
 
 import express from "express";
-import { loginUser, registerUser, getUserProfile } from "../controllers/auth.js"; // Added getUserProfile
+import { loginUser, registerUser, getUserProfile ,deleteUserProfile} from "../controllers/auth.js"; // Added getUserProfile
 import { authenticate, authorize } from "../middleware/authmiddleware.js";
 
 const router = express.Router();
@@ -31,5 +31,6 @@ router.get("/profile", authenticate, getUserProfile);
 
 // Admin-only profile route
 router.get("/admin/profile", authenticate, authorize("admin"), getUserProfile);
+router.delete("/profile", authenticate, deleteUserProfile);
 
 export default router;
