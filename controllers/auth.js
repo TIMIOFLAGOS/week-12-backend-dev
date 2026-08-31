@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 
 
-import {Auth} from "../model/auth.js";
+import Auth from "../model/auth.js";
 import { generateToken, hashPassword } from "../utilities/utilities.js";
 
 /**
