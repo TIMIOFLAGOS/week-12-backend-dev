@@ -1,5 +1,7 @@
 import bcrypt from "bcrypt";
-import Auth from "../model/Auth.js";
+
+
+import {Auth} from "../model/auth.js";
 import { generateToken, hashPassword } from "../utilities/utilities.js";
 
 /**
@@ -125,6 +127,32 @@ export const getUserProfile = async (req, res) => {
       success: true,
       message: "Profile retrieved successfully",
       data: user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+/**
+ * Delete User Account Endpoint
+ */
+export const deleteUserProfile = async (req, res) => {
+  try {
+    const deletedUser = await Auth.findByIdAndDelete(req.user.id);
+
+    if (!deletedUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User account not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Account deleted successfully",
     });
   } catch (error) {
     return res.status(500).json({
