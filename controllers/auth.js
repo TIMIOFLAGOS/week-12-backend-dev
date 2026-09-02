@@ -1,6 +1,4 @@
 import bcrypt from "bcrypt";
-
-
 import Auth from "../model/auth.js";
 import { generateToken, hashPassword } from "../utilities/utilities.js";
 
@@ -9,7 +7,7 @@ import { generateToken, hashPassword } from "../utilities/utilities.js";
  */
 export const registerUser = async (req, res) => {
   // Safely destructure req.body with a fallback empty object
-  const { firstname, lastname, email, password, phoneNumber } = req.body || {};
+  const { firstname, lastname, email, password, phoneNumber, role } = req.body || {};
 
   // Check for required fields
   if (!firstname || !email || !password) {
@@ -36,13 +34,14 @@ export const registerUser = async (req, res) => {
     // Hash raw password
     const hashedPassword = await hashPassword(password);
 
-    // Save new user
+    // Save new user (defaults to "user" if role is not passed)
     const savedUser = await Auth.create({
       firstname,
       lastname,
       email: normalizedEmail,
       password: hashedPassword,
       phoneNumber,
+      role: role || "user",
     });
 
     return res.status(201).json({
@@ -52,6 +51,7 @@ export const registerUser = async (req, res) => {
         id: savedUser._id,
         name: savedUser.firstname,
         emailAddress: savedUser.email,
+        role: savedUser.role,
       },
     });
   } catch (error) {
